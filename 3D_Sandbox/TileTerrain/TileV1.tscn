@@ -1,0 +1,37 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://TileTerrain/Tile.gd" type="Script" id=1]
+
+[sub_resource type="CubeMesh" id=2]
+
+[sub_resource type="Skin" id=4]
+
+[sub_resource type="SpatialMaterial" id=5]
+
+[sub_resource type="BoxShape" id=1]
+
+[sub_resource type="CubeMesh" id=3]
+
+[sub_resource type="BoxShape" id=6]
+
+[node name="TileV1" type="StaticBody"]
+script = ExtResource( 1 )
+
+[node name="Wall" type="MeshInstance" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0 )
+mesh = SubResource( 2 )
+skin = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="CollisionWall" type="CollisionShape" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0 )
+shape = SubResource( 1 )
+
+[node name="Floor" type="MeshInstance" parent="."]
+transform = Transform( 1, 0, 0, 0, 0.25, 0, 0, 0, 1, 0, -0.25, 0 )
+mesh = SubResource( 3 )
+
+[node name="CollisionFloor" type="CollisionShape" parent="."]
+transform = Transform( 1, 0, 0, 0, 0.25, 0, 0, 0, 1, 0, -0.25, 0 )
+visible = false
+shape = SubResource( 6 )
