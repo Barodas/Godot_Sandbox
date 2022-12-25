@@ -1,8 +1,15 @@
 extends Spatial
 
+signal tile_clicked(x, z)
+
 var timer = 0
 var timerReset
 
+var xCoord
+var zCoord
+var isHovered
+
+var isClicked
 
 func _ready():
 	timerReset = rand_range(1, 5)
@@ -16,22 +23,30 @@ func _ready():
 
 
 func _process(delta):
-	timer += delta
-	if timer > timerReset:
-		toggleWall()
-		timer = 0
+#	timer += delta
+#	if timer > timerReset:
+#		toggleWall()
+#		timer = 0
+	if isHovered && Input.is_action_just_pressed("mouse_left_click"):
+		emit_signal("tile_clicked", xCoord, zCoord)
 
 
 func _on_mouse_enter():
-	setColour(Color.blue)
+	isHovered = true
+	if !isClicked:
+		setColour(Color.blue)
 
 
 func _on_mouse_exit():
-	setColour(Color.white)
+	isHovered = false
+	if !isClicked:
+		setColour(Color.white)
 
 
-func initialise(x, z):
-	transform.origin = Vector3(x, 0, z)
+func initialise(x, z, offset):
+	transform.origin = Vector3(x * offset, 0, z * offset)
+	xCoord = x
+	zCoord = z
 
 
 func setColour(colour):
@@ -40,6 +55,13 @@ func setColour(colour):
 	$Wall/Mesh.set_surface_material(0, material)
 	$Floor/Mesh.set_surface_material(0, material)
 
+func selectTile():
+	isClicked = !isClicked
+	
+	if(isClicked):
+		setColour(Color.red)
+	else:
+		setColour(Color.orange)
 
 func toggleWall():
 	var state = !$Wall.visible
