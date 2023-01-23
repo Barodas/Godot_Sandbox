@@ -35,12 +35,16 @@ func _on_mouse_enter():
 	isHovered = true
 	if !isClicked:
 		setColour(Color.blue)
+	else:
+		setColour(Color.orange)
 
 
 func _on_mouse_exit():
 	isHovered = false
 	if !isClicked:
 		setColour(Color.white)
+	else:
+		setColour(Color.red)
 
 
 func initialise(x, z, offset):
@@ -59,9 +63,9 @@ func selectTile():
 	isClicked = !isClicked
 	
 	if(isClicked):
-		setColour(Color.red)
-	else:
 		setColour(Color.orange)
+	else:
+		setColour(Color.blue)
 
 func toggleWall():
 	var state = !$Wall.visible

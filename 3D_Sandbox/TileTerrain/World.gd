@@ -8,6 +8,7 @@ var depth = 10
 var tiles = []
 
 func _ready():
+	# Generate Terrain Tiles
 	for x in width:
 		tiles.append([])
 		for z in depth:
