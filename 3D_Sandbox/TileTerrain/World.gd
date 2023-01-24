@@ -7,6 +7,10 @@ var depth = 10
 
 var tiles = []
 
+var isHovering
+var hoverX
+var hoverZ
+
 var isSelecting
 var hasSelection
 var selectStartIndexX
@@ -22,10 +26,16 @@ func _ready():
 			var instance = tileScene.instance()
 			instance.initialise(x, z, 2)
 			instance.connect("tile_clicked", self, "_on_tile_clicked")
+			instance.connect("tile_mouse_enter", self, "_on_tile_hover_enter")
+			instance.connect("tile_mouse_exit", self, "_on_tile_hover_exit")
 			tiles[x].append(instance)
 			add_child(instance)
 
+
 func _process(delta):
+	if isHovering && Input.is_action_just_pressed("mouse_left_click"):
+		selectTile(hoverX, hoverZ)
+	
 	if(Input.is_action_just_pressed("mouse_right_click")):
 		# Clear selection
 		if(hasSelection):
@@ -40,7 +50,7 @@ func _process(delta):
 		selectTiles(true)
 
 
-func _on_tile_clicked(x, z):
+func selectTile(x, z):
 #	tiles[x][z].isClicked = true
 	#tiles[x][z].toggleTile()
 	
@@ -56,6 +66,18 @@ func _on_tile_clicked(x, z):
 			hasSelection = true
 			selectEndIndexX = x
 			selectEndIndexZ = z
+
+
+func _on_tile_hover_enter(x, z):
+	isHovering = true
+	hoverX = x
+	hoverZ = z
+
+
+func _on_tile_hover_exit(x, z):
+	isHovering = false
+	hoverX = -1
+	hoverZ = -1
 
 
 func selectTiles(state):

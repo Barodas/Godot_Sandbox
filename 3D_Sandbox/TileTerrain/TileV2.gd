@@ -1,6 +1,8 @@
 extends Spatial
 
 signal tile_clicked(x, z)
+signal tile_mouse_enter(x, z)
+signal tile_mouse_exit(x, z)
 
 var timer = 0
 var timerReset
@@ -28,17 +30,20 @@ func _process(delta):
 #	if timer > timerReset:
 #		toggleWall()
 #		timer = 0
-	if isHovered && Input.is_action_just_pressed("mouse_left_click"):
-		emit_signal("tile_clicked", xCoord, zCoord)
+#	if isHovered && Input.is_action_just_pressed("mouse_left_click"):
+#		emit_signal("tile_clicked", xCoord, zCoord)
+	pass
 
 
 func _on_mouse_enter():
 	isHovered = true
+	emit_signal("tile_mouse_enter", xCoord, zCoord)
 	processState()
 
 
 func _on_mouse_exit():
 	isHovered = false
+	emit_signal("tile_mouse_exit", xCoord, zCoord)
 	processState()
 
 
