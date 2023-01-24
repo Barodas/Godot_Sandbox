@@ -59,13 +59,19 @@ func setColour(colour):
 	$Wall/Mesh.set_surface_material(0, material)
 	$Floor/Mesh.set_surface_material(0, material)
 
-func selectTile():
-	isClicked = !isClicked
+
+func toggleTile():
+	selectTile(!isClicked)
+
+
+func selectTile(state):
+	isClicked = state
 	
 	if(isClicked):
 		setColour(Color.orange)
 	else:
 		setColour(Color.blue)
+
 
 func toggleWall():
 	var state = !$Wall.visible
