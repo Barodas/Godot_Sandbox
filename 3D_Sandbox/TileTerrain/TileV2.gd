@@ -7,9 +7,10 @@ var timerReset
 
 var xCoord
 var zCoord
-var isHovered
 
-var isClicked
+var isHovered
+var isSelected
+
 
 func _ready():
 	timerReset = rand_range(1, 5)
@@ -33,24 +34,31 @@ func _process(delta):
 
 func _on_mouse_enter():
 	isHovered = true
-	if !isClicked:
-		setColour(Color.blue)
-	else:
-		setColour(Color.orange)
+	processState()
 
 
 func _on_mouse_exit():
 	isHovered = false
-	if !isClicked:
-		setColour(Color.white)
-	else:
-		setColour(Color.red)
+	processState()
 
 
 func initialise(x, z, offset):
 	transform.origin = Vector3(x * offset, 0, z * offset)
 	xCoord = x
 	zCoord = z
+
+
+func processState():
+	if(isSelected):
+		if(isHovered):
+			setColour(Color.orange)
+		else:
+			setColour(Color.red)
+	else:
+		if(isHovered):
+			setColour(Color.blue)
+		else:
+			setColour(Color.white)
 
 
 func setColour(colour):
@@ -61,16 +69,12 @@ func setColour(colour):
 
 
 func toggleTile():
-	selectTile(!isClicked)
+	selectTile(!isSelected)
 
 
 func selectTile(state):
-	isClicked = state
-	
-	if(isClicked):
-		setColour(Color.orange)
-	else:
-		setColour(Color.blue)
+	isSelected = state
+	processState()
 
 
 func toggleWall():

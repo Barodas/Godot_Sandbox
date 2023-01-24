@@ -30,29 +30,14 @@ func _process(delta):
 		# Clear selection
 		if(hasSelection):
 			# Clear tile states if we had completed the selection
-			# TODO: Move code below into a function with bool to either activate/deactivate selected tiles
-			var minX = min(selectStartIndexX, selectEndIndexX)
-			var maxX = max(selectStartIndexX, selectEndIndexX)
-			var minZ = min(selectStartIndexZ, selectEndIndexZ)
-			var maxZ = max(selectStartIndexZ, selectEndIndexZ)
-			
-			for x in range(minX, maxX + 1):
-				for z in range(minZ, maxZ + 1):
-					tiles[x][z].selectTile(false)
-		
+			selectTiles(false)
 		hasSelection = false
 		isSelecting = false
 	
+	# TODO: How to track active selection box between first and second click?
 	if(hasSelection):
 		# Highlight all tiles that are in selection box
-		var minX = min(selectStartIndexX, selectEndIndexX)
-		var maxX = max(selectStartIndexX, selectEndIndexX)
-		var minZ = min(selectStartIndexZ, selectEndIndexZ)
-		var maxZ = max(selectStartIndexZ, selectEndIndexZ)
-		
-		for x in range(minX, maxX + 1):
-			for z in range(minZ, maxZ + 1):
-				tiles[x][z].selectTile(true)
+		selectTiles(true)
 
 
 func _on_tile_clicked(x, z):
@@ -71,3 +56,15 @@ func _on_tile_clicked(x, z):
 			hasSelection = true
 			selectEndIndexX = x
 			selectEndIndexZ = z
+
+
+func selectTiles(state):
+	# TODO: Check indices are valid before loop
+	var minX = min(selectStartIndexX, selectEndIndexX)
+	var maxX = max(selectStartIndexX, selectEndIndexX)
+	var minZ = min(selectStartIndexZ, selectEndIndexZ)
+	var maxZ = max(selectStartIndexZ, selectEndIndexZ)
+	
+	for x in range(minX, maxX + 1):
+		for z in range(minZ, maxZ + 1):
+			tiles[x][z].selectTile(state)
