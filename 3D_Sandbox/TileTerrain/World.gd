@@ -18,6 +18,11 @@ var selectStartIndexZ
 var selectEndIndexX
 var selectEndIndexZ
 
+var previewHover
+var prevX
+var prevZ
+
+
 func _ready():
 	# Generate Terrain Tiles
 	for x in width:
@@ -38,22 +43,36 @@ func _process(delta):
 	
 	if(Input.is_action_just_pressed("mouse_right_click")):
 		# Clear selection
+		if(previewHover):
+			selectTiles(prevX, prevZ, false)
+			previewHover = false
 		if(hasSelection):
 			# Clear tile states if we had completed the selection
-			selectTiles(false)
+			selectTiles(selectEndIndexX, selectEndIndexZ, false)
 		hasSelection = false
 		isSelecting = false
 	
-	# TODO: How to track active selection box between first and second click?
+	# Highlight all tiles that are in selection box
 	if(hasSelection):
-		# Highlight all tiles that are in selection box
-		selectTiles(true)
+		selectTiles(selectEndIndexX, selectEndIndexZ, true)
+	
+	# Display expected selection area between first click and current mouse
+	if(isSelecting && !hasSelection):
+		# Clear previous hover state
+		if(previewHover):
+			selectTiles(prevX, prevZ, false)
+			previewHover = false
+		# Select tiles in hover area
+		if(!previewHover):
+			# If there is no tile hovered, keep the previous valid preview
+			if(hoverX != -1 && hoverZ != -1):
+				prevX = hoverX
+				prevZ = hoverZ
+			selectTiles(prevX, prevZ, true)
+			previewHover = true
 
 
 func selectTile(x, z):
-#	tiles[x][z].isClicked = true
-	#tiles[x][z].toggleTile()
-	
 	if(!hasSelection):
 		if(!isSelecting):
 			# Start Selection
@@ -80,12 +99,11 @@ func _on_tile_hover_exit(x, z):
 	hoverZ = -1
 
 
-func selectTiles(state):
-	# TODO: Check indices are valid before loop
-	var minX = min(selectStartIndexX, selectEndIndexX)
-	var maxX = max(selectStartIndexX, selectEndIndexX)
-	var minZ = min(selectStartIndexZ, selectEndIndexZ)
-	var maxZ = max(selectStartIndexZ, selectEndIndexZ)
+func selectTiles(endx, endz, state):
+	var minX = min(selectStartIndexX, endx)
+	var maxX = max(selectStartIndexX, endx)
+	var minZ = min(selectStartIndexZ, endz)
+	var maxZ = max(selectStartIndexZ, endz)
 	
 	for x in range(minX, maxX + 1):
 		for z in range(minZ, maxZ + 1):

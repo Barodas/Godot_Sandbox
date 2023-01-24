@@ -1,6 +1,5 @@
 extends Spatial
 
-signal tile_clicked(x, z)
 signal tile_mouse_enter(x, z)
 signal tile_mouse_exit(x, z)
 
@@ -84,7 +83,6 @@ func selectTile(state):
 
 func toggleWall():
 	var state = !$Wall.visible
-	
 	$Wall.visible = state
 	$Wall/Collision.visible = state
 	$Floor/Collision.visible = !state
