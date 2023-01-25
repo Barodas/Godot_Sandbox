@@ -2,8 +2,15 @@ extends Spatial
 
 export (PackedScene) var tileScene
 
-var width = 10
-var depth = 10
+var map = [ [1,1,1,1,1,1,1,1,1,1],
+			[1,1,1,1,1,1,1,1,1,1],
+			[1,1,1,1,1,1,1,1,1,1],
+			[1,1,1,1,1,1,1,1,1,1],
+			[1,1,1,1,1,1,1,1,1,1],
+			[1,1,1,1,1,1,1,1,1,1],
+			[1,1,1,1,1,1,1,1,1,1],
+			[1,1,1,1,0,0,1,1,1,1],
+			[1,1,1,0,0,0,0,1,1,1]]
 
 var tiles = []
 
@@ -25,15 +32,15 @@ var prevZ
 
 func _ready():
 	# Generate Terrain Tiles
-	for x in width:
+	for z in map.size():
 		tiles.append([])
-		for z in depth:
+		for x in map[z].size():
 			var instance = tileScene.instance()
-			instance.initialise(x, z, 2)
+			instance.initialise(x, z, 2, map[z][x])
 			instance.connect("tile_clicked", self, "_on_tile_clicked")
 			instance.connect("tile_mouse_enter", self, "_on_tile_hover_enter")
 			instance.connect("tile_mouse_exit", self, "_on_tile_hover_exit")
-			tiles[x].append(instance)
+			tiles[z].append(instance)
 			add_child(instance)
 
 
@@ -105,6 +112,6 @@ func selectTiles(endx, endz, state):
 	var minZ = min(selectStartIndexZ, endz)
 	var maxZ = max(selectStartIndexZ, endz)
 	
-	for x in range(minX, maxX + 1):
-		for z in range(minZ, maxZ + 1):
-			tiles[x][z].selectTile(state)
+	for z in range(minZ, maxZ + 1):
+		for x in range(minX, maxX + 1):
+			tiles[z][x].selectTile(state)

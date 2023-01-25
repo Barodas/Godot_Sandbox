@@ -46,10 +46,11 @@ func _on_mouse_exit():
 	processState()
 
 
-func initialise(x, z, offset):
+func initialise(x, z, offset, initialState):
 	transform.origin = Vector3(x * offset, 0, z * offset)
 	xCoord = x
 	zCoord = z
+	setWall(initialState != 0)
 
 
 func processState():
@@ -82,8 +83,10 @@ func selectTile(state):
 
 
 func toggleWall():
-	var state = !$Wall.visible
+	setWall(!$Wall.visible)
+
+
+func setWall(state):
 	$Wall.visible = state
 	$Wall/Collision.visible = state
 	$Floor/Collision.visible = !state
-
