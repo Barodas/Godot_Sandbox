@@ -50,7 +50,7 @@ func initialise(x, z, offset, initialState):
 	transform.origin = Vector3(x * offset, 0, z * offset)
 	xCoord = x
 	zCoord = z
-	setWall(initialState != 0)
+	setWall(initialState == 1)
 
 
 func processState():
@@ -90,3 +90,7 @@ func setWall(state):
 	$Wall.visible = state
 	$Wall/Collision.visible = state
 	$Floor/Collision.visible = !state
+
+
+func getWall():
+	return $Wall.visible

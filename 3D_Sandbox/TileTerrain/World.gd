@@ -1,6 +1,7 @@
 extends Spatial
 
 export (PackedScene) var tileScene
+export (PackedScene) var villagerScene
 
 var map = [ [1,1,1,1,1,1,1,1,1,1],
 			[1,1,1,1,1,1,1,1,1,1],
@@ -10,9 +11,10 @@ var map = [ [1,1,1,1,1,1,1,1,1,1],
 			[1,1,1,1,1,1,1,1,1,1],
 			[1,1,1,1,1,1,1,1,1,1],
 			[1,1,1,1,0,0,1,1,1,1],
-			[1,1,1,0,0,0,0,1,1,1]]
+			[1,1,1,0,0,2,0,1,1,1]]
 
 var tiles = []
+var villagers = []
 
 var isHovering
 var hoverX
@@ -31,17 +33,27 @@ var prevZ
 
 
 func _ready():
+	# Seed random number generator
+	randomize()
+	
 	# Generate Terrain Tiles
 	for z in map.size():
 		tiles.append([])
 		for x in map[z].size():
 			var instance = tileScene.instance()
 			instance.initialise(x, z, 2, map[z][x])
-			instance.connect("tile_clicked", self, "_on_tile_clicked")
+			#instance.connect("tile_clicked", self, "_on_tile_clicked")
 			instance.connect("tile_mouse_enter", self, "_on_tile_hover_enter")
 			instance.connect("tile_mouse_exit", self, "_on_tile_hover_exit")
 			tiles[z].append(instance)
 			add_child(instance)
+			
+			# Create a villager
+			if(map[z][x] == 2):
+				var villagerInstance = villagerScene.instance()
+				villagerInstance.initialise(x, z, 2, self)
+				villagers.append(villagerInstance)
+				add_child(villagerInstance)
 
 
 func _process(delta):
@@ -104,6 +116,25 @@ func _on_tile_hover_exit(x, z):
 	isHovering = false
 	hoverX = -1
 	hoverZ = -1
+
+
+func getNearbyEmptyTiles(xPos, zPos):
+	var nearbyTiles = []
+	for z in range(zPos - 1, zPos + 2):
+		for x in range(xPos - 1, xPos + 2):
+			#if(z < 0 || z >= tiles.size() || x < 0 || x >= tiles[z].size() || tiles[z][x].getWall()):
+			#	continue
+			if(z < 0 || z >= tiles.size()):
+				print("skip hit z")
+				continue
+			if(x < 0 || x >= tiles[z].size()):
+				print("skip hit x")
+				continue
+			if(tiles[z][x].getWall()):
+				print("skip hit wall")
+				continue
+			nearbyTiles.append(tiles[z][x])
+	return nearbyTiles
 
 
 func selectTiles(endx, endz, state):

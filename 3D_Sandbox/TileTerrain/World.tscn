@@ -1,12 +1,14 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://TileTerrain/Camera.tscn" type="PackedScene" id=1]
 [ext_resource path="res://TileTerrain/TileV2.tscn" type="PackedScene" id=2]
 [ext_resource path="res://TileTerrain/World.gd" type="Script" id=3]
+[ext_resource path="res://TileTerrain/Villager.tscn" type="PackedScene" id=4]
 
 [node name="World" type="Spatial"]
 script = ExtResource( 3 )
 tileScene = ExtResource( 2 )
+villagerScene = ExtResource( 4 )
 
 [node name="Camera" parent="." instance=ExtResource( 1 )]
 transform = Transform( 1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 9, 10, 21 )
