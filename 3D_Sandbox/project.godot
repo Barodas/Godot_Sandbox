@@ -11,7 +11,7 @@ config_version=4
 [application]
 
 config/name="3D_Sandbox"
-run/main_scene="res://TileTerrain/World.tscn"
+run/main_scene="res://TileTerrain/Controller.tscn"
 config/icon="res://icon.png"
 
 [gui]

@@ -6,12 +6,11 @@ signal tile_mouse_exit(x, z)
 var timer = 0
 var timerReset
 
-var xCoord
-var zCoord
+var x_coord
+var z_coord
 
-var isHovered
-var isSelected
-
+var is_hovered
+var is_selected
 
 func _ready():
 	timerReset = rand_range(1, 5)
@@ -23,74 +22,57 @@ func _ready():
 	$Wall.connect("mouse_entered", self, "_on_mouse_enter")
 	$Wall.connect("mouse_exited", self, "_on_mouse_exit")
 
-
 func _process(delta):
-#	timer += delta
-#	if timer > timerReset:
-#		toggleWall()
-#		timer = 0
-#	if isHovered && Input.is_action_just_pressed("mouse_left_click"):
-#		emit_signal("tile_clicked", xCoord, zCoord)
 	pass
 
-
 func _on_mouse_enter():
-	isHovered = true
-	emit_signal("tile_mouse_enter", xCoord, zCoord)
-	processState()
-
+	is_hovered = true
+	emit_signal("tile_mouse_enter", x_coord, z_coord)
+	process_state()
 
 func _on_mouse_exit():
-	isHovered = false
-	emit_signal("tile_mouse_exit", xCoord, zCoord)
-	processState()
-
+	is_hovered = false
+	emit_signal("tile_mouse_exit", x_coord, z_coord)
+	process_state()
 
 func initialise(x, z, offset, initialState):
 	transform.origin = Vector3(x * offset, 0, z * offset)
-	xCoord = x
-	zCoord = z
-	setWall(initialState == 1)
+	x_coord = x
+	z_coord = z
+	set_wall(initialState == 1)
 
-
-func processState():
-	if(isSelected):
-		if(isHovered):
-			setColour(Color.orange)
+func process_state():
+	if(is_selected):
+		if(is_hovered):
+			set_colour(Color.orange)
 		else:
-			setColour(Color.red)
+			set_colour(Color.red)
 	else:
-		if(isHovered):
-			setColour(Color.blue)
+		if(is_hovered):
+			set_colour(Color.blue)
 		else:
-			setColour(Color.white)
+			set_colour(Color.white)
 
-
-func setColour(colour):
+func set_colour(colour):
 	var material = $Wall/Mesh.get_surface_material(0)
 	material.albedo_color = colour
 	$Wall/Mesh.set_surface_material(0, material)
 	$Floor/Mesh.set_surface_material(0, material)
 
+func toggle_tile():
+	select_tile(!is_selected)
 
-func toggleTile():
-	selectTile(!isSelected)
+func select_tile(state):
+	is_selected = state
+	process_state()
 
+func toggle_wall():
+	set_wall(!$Wall.visible)
 
-func selectTile(state):
-	isSelected = state
-	processState()
-
-
-func toggleWall():
-	setWall(!$Wall.visible)
-
-
-func setWall(state):
+func set_wall(state):
 	$Wall.visible = state
 	$Wall/Collision.visible = state
 	$Floor/Collision.visible = !state
 
-
-func getWall():
+func get_wall():
 	return $Wall.visible

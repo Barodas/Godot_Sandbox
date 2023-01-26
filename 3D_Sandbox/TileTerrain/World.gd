@@ -1,7 +1,7 @@
 extends Spatial
 
-export (PackedScene) var tileScene
-export (PackedScene) var villagerScene
+export (PackedScene) var tile_scene
+export (PackedScene) var villager_scene
 
 var map = [ [1,1,1,1,1,1,1,1,1,1],
 			[1,1,1,1,1,1,1,1,1,1],
@@ -16,21 +16,20 @@ var map = [ [1,1,1,1,1,1,1,1,1,1],
 var tiles = []
 var villagers = []
 
-var isHovering
-var hoverX
-var hoverZ
+var is_hovering
+var hover_x
+var hover_z
 
-var isSelecting
-var hasSelection
-var selectStartIndexX
-var selectStartIndexZ
-var selectEndIndexX
-var selectEndIndexZ
+var is_selecting
+var has_selection
+var select_start_x
+var select_start_z
+var select_end_x
+var select_end_z
 
-var previewHover
-var prevX
-var prevZ
-
+var preview_hover
+var preview_x
+var preview_z
 
 func _ready():
 	# Seed random number generator
@@ -40,9 +39,8 @@ func _ready():
 	for z in map.size():
 		tiles.append([])
 		for x in map[z].size():
-			var instance = tileScene.instance()
+			var instance = tile_scene.instance()
 			instance.initialise(x, z, 2, map[z][x])
-			#instance.connect("tile_clicked", self, "_on_tile_clicked")
 			instance.connect("tile_mouse_enter", self, "_on_tile_hover_enter")
 			instance.connect("tile_mouse_exit", self, "_on_tile_hover_exit")
 			tiles[z].append(instance)
@@ -50,75 +48,79 @@ func _ready():
 			
 			# Create a villager
 			if(map[z][x] == 2):
-				var villagerInstance = villagerScene.instance()
-				villagerInstance.initialise(x, z, 2, self)
+				var villagerInstance = villager_scene.instance()
+				villagerInstance.initialise(x, z, 2)
 				villagers.append(villagerInstance)
 				add_child(villagerInstance)
 
-
 func _process(delta):
-	if isHovering && Input.is_action_just_pressed("mouse_left_click"):
-		selectTile(hoverX, hoverZ)
-	
-	if(Input.is_action_just_pressed("mouse_right_click")):
-		# Clear selection
-		if(previewHover):
-			selectTiles(prevX, prevZ, false)
-			previewHover = false
-		if(hasSelection):
-			# Clear tile states if we had completed the selection
-			selectTiles(selectEndIndexX, selectEndIndexZ, false)
-		hasSelection = false
-		isSelecting = false
-	
 	# Highlight all tiles that are in selection box
-	if(hasSelection):
-		selectTiles(selectEndIndexX, selectEndIndexZ, true)
+	if(has_selection):
+		select_tiles(select_end_x, select_end_z, true)
 	
 	# Display expected selection area between first click and current mouse
-	if(isSelecting && !hasSelection):
+	if(is_selecting && !has_selection):
 		# Clear previous hover state
-		if(previewHover):
-			selectTiles(prevX, prevZ, false)
-			previewHover = false
+		if(preview_hover):
+			select_tiles(preview_x, preview_z, false)
+			preview_hover = false
 		# Select tiles in hover area
-		if(!previewHover):
+		if(!preview_hover):
 			# If there is no tile hovered, keep the previous valid preview
-			if(hoverX != -1 && hoverZ != -1):
-				prevX = hoverX
-				prevZ = hoverZ
-			selectTiles(prevX, prevZ, true)
-			previewHover = true
-
-
-func selectTile(x, z):
-	if(!hasSelection):
-		if(!isSelecting):
-			# Start Selection
-			isSelecting = true
-			selectStartIndexX = x
-			selectStartIndexZ = z
-		else:
-			# Finish Selection
-			isSelecting = false
-			hasSelection = true
-			selectEndIndexX = x
-			selectEndIndexZ = z
-
+			if(hover_x != -1 && hover_z != -1):
+				preview_x = hover_x
+				preview_z = hover_z
+			select_tiles(preview_x, preview_z, true)
+			preview_hover = true
 
 func _on_tile_hover_enter(x, z):
-	isHovering = true
-	hoverX = x
-	hoverZ = z
-
+	is_hovering = true
+	hover_x = x
+	hover_z = z
 
 func _on_tile_hover_exit(x, z):
-	isHovering = false
-	hoverX = -1
-	hoverZ = -1
+	is_hovering = false
+	hover_x = -1
+	hover_z = -1
 
+func select_tile(x, z):
+	if(!has_selection):
+		if(!is_selecting):
+			# Start Selection
+			is_selecting = true
+			select_start_x = x
+			select_start_z = z
+		else:
+			# Finish Selection
+			is_selecting = false
+			has_selection = true
+			select_end_x = x
+			select_end_z = z
 
-func getNearbyEmptyTiles(xPos, zPos):
+func select_hovered_tile():
+	select_tile(hover_x, hover_z)
+
+func select_tiles(endx, endz, state):
+	var minX = min(select_start_x, endx)
+	var maxX = max(select_start_x, endx)
+	var minZ = min(select_start_z, endz)
+	var maxZ = max(select_start_z, endz)
+	
+	for z in range(minZ, maxZ + 1):
+		for x in range(minX, maxX + 1):
+			tiles[z][x].select_tile(state)
+
+func clear_selection():
+	if(preview_hover):
+		select_tiles(preview_x, preview_z, false)
+		preview_hover = false
+	if(has_selection):
+		# Clear tile states if we had completed the selection
+		select_tiles(select_end_x, select_end_z, false)
+	has_selection = false
+	is_selecting = false
+
+func get_nearby_empty_tiles(xPos, zPos):
 	var nearbyTiles = []
 	for z in range(zPos - 1, zPos + 2):
 		for x in range(xPos - 1, xPos + 2):
@@ -130,19 +132,8 @@ func getNearbyEmptyTiles(xPos, zPos):
 			if(x < 0 || x >= tiles[z].size()):
 				print("skip hit x")
 				continue
-			if(tiles[z][x].getWall()):
+			if(tiles[z][x].get_wall()):
 				print("skip hit wall")
 				continue
 			nearbyTiles.append(tiles[z][x])
 	return nearbyTiles
-
-
-func selectTiles(endx, endz, state):
-	var minX = min(selectStartIndexX, endx)
-	var maxX = max(selectStartIndexX, endx)
-	var minZ = min(selectStartIndexZ, endz)
-	var maxZ = max(selectStartIndexZ, endz)
-	
-	for z in range(minZ, maxZ + 1):
-		for x in range(minX, maxX + 1):
-			tiles[z][x].selectTile(state)
