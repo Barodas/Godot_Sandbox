@@ -5,10 +5,10 @@
 [ext_resource path="res://TileTerrain/World.gd" type="Script" id=3]
 [ext_resource path="res://TileTerrain/Villager.tscn" type="PackedScene" id=4]
 
-[node name="World" type="Spatial"]
+[node name="World" type="Node3D"]
 script = ExtResource( 3 )
 tile_scene = ExtResource( 2 )
 villager_scene = ExtResource( 4 )
 
-[node name="Camera" parent="." instance=ExtResource( 1 )]
-transform = Transform( 1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 9, 10, 21 )
+[node name="Camera3D" parent="." instance=ExtResource( 1 )]
+transform = Transform3D( 1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 9, 10, 21 )

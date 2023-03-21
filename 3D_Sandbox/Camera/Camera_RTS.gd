@@ -1,4 +1,4 @@
-extends Camera
+extends Camera3D
 
 
 var speed = 3

@@ -1,7 +1,7 @@
-extends KinematicBody
+extends CharacterBody3D
 
 # TODO: Find a better way to get info from world tiles
-onready var World = get_parent()
+@onready var World = get_parent()
 
 var timer : float
 var speed := 2.0

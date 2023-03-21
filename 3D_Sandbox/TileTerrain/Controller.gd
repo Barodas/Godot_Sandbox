@@ -1,9 +1,9 @@
 extends Node
 
-onready var World = get_node("World")
-onready var DigButton = get_node("UI/DigOrderButton")
-onready var ModeText = get_node("UI/ModeText")
-onready var InfoBox = get_node("UI/InfoBox")
+@onready var World = get_node("World")
+@onready var DigButton = get_node("UI/DigOrderButton")
+@onready var ModeText = get_node("UI/ModeText")
+@onready var InfoBox = get_node("UI/InfoBox")
 
 enum ClickMode {
 	INFO,
@@ -15,7 +15,7 @@ var click_mode = ClickMode.INFO
 func _ready():
 	# Initialise UI
 	update_mode_text()
-	DigButton.connect("pressed", self, "_on_dig_button_pressed")
+	DigButton.connect("pressed", Callable(self, "_on_dig_button_pressed"))
 
 func _process(delta):
 	pass

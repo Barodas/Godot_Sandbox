@@ -1,4 +1,4 @@
-extends Spatial
+extends Node3D
 
 signal tile_mouse_enter(x, z)
 signal tile_mouse_exit(x, z)
@@ -13,14 +13,14 @@ var is_hovered
 var is_selected
 
 func _ready():
-	timerReset = rand_range(1, 5)
-	var material = SpatialMaterial.new()
-	$Wall/Mesh.set_surface_material(0, material)
-	$Floor/Mesh.set_surface_material(0, material)
-	$Floor.connect("mouse_entered", self, "_on_mouse_enter")
-	$Floor.connect("mouse_exited", self, "_on_mouse_exit")
-	$Wall.connect("mouse_entered", self, "_on_mouse_enter")
-	$Wall.connect("mouse_exited", self, "_on_mouse_exit")
+	timerReset = randf_range(1, 5)
+	var material = StandardMaterial3D.new()
+	$Wall/Mesh.set_surface_override_material(0, material)
+	$Floor/Mesh.set_surface_override_material(0, material)
+	$Floor.connect("mouse_entered", Callable(self, "_on_mouse_enter"))
+	$Floor.connect("mouse_exited", Callable(self, "_on_mouse_exit"))
+	$Wall.connect("mouse_entered", Callable(self, "_on_mouse_enter"))
+	$Wall.connect("mouse_exited", Callable(self, "_on_mouse_exit"))
 
 func _process(delta):
 	pass
@@ -44,20 +44,20 @@ func initialise(x, z, offset, initialState):
 func process_state():
 	if(is_selected):
 		if(is_hovered):
-			set_colour(Color.orange)
+			set_colour(Color.ORANGE)
 		else:
-			set_colour(Color.red)
+			set_colour(Color.RED)
 	else:
 		if(is_hovered):
-			set_colour(Color.blue)
+			set_colour(Color.BLUE)
 		else:
-			set_colour(Color.white)
+			set_colour(Color.WHITE)
 
 func set_colour(colour):
-	var material = $Wall/Mesh.get_surface_material(0)
+	var material = $Wall/Mesh.get_surface_override_material(0)
 	material.albedo_color = colour
-	$Wall/Mesh.set_surface_material(0, material)
-	$Floor/Mesh.set_surface_material(0, material)
+	$Wall/Mesh.set_surface_override_material(0, material)
+	$Floor/Mesh.set_surface_override_material(0, material)
 
 func toggle_tile():
 	select_tile(!is_selected)

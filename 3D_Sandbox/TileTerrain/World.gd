@@ -1,7 +1,7 @@
-extends Spatial
+extends Node3D
 
-export (PackedScene) var tile_scene
-export (PackedScene) var villager_scene
+@export (PackedScene) var tile_scene
+@export (PackedScene) var villager_scene
 
 var map = [ [1,1,1,1,1,1,1,1,1,1],
 			[1,1,1,1,1,1,1,1,1,1],
@@ -39,16 +39,16 @@ func _ready():
 	for z in map.size():
 		tiles.append([])
 		for x in map[z].size():
-			var instance = tile_scene.instance()
+			var instance = tile_scene.instantiate()
 			instance.initialise(x, z, 2, map[z][x])
-			instance.connect("tile_mouse_enter", self, "_on_tile_hover_enter")
-			instance.connect("tile_mouse_exit", self, "_on_tile_hover_exit")
+			instance.connect("tile_mouse_enter", Callable(self, "_on_tile_hover_enter"))
+			instance.connect("tile_mouse_exit", Callable(self, "_on_tile_hover_exit"))
 			tiles[z].append(instance)
 			add_child(instance)
 			
 			# Create a villager
 			if(map[z][x] == 2):
-				var villagerInstance = villager_scene.instance()
+				var villagerInstance = villager_scene.instantiate()
 				villagerInstance.initialise(x, z, 2)
 				villagers.append(villagerInstance)
 				add_child(villagerInstance)

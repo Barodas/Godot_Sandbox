@@ -6,12 +6,12 @@
 
 [node name="RpgRoot" type="Node"]
 
-[node name="Terrain" type="CSGMesh" parent="."]
-transform = Transform( 10, 0, 0, 0, 1, 0, 0, 0, 10, 0, 0, 0 )
+[node name="Terrain" type="CSGMesh3D" parent="."]
+transform = Transform3D( 10, 0, 0, 0, 1, 0, 0, 0, 10, 0, 0, 0 )
 mesh = SubResource( 1 )
 material = SubResource( 2 )
 
-[node name="Camera" type="Camera" parent="."]
-transform = Transform( 1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 1, 1 )
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D( 1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 1, 1 )
 
-[node name="CSGMesh2" type="CSGMesh" parent="."]
+[node name="CSGMesh2" type="CSGMesh3D" parent="."]

@@ -1,16 +1,16 @@
-extends Spatial
+extends Node3D
 
 var timer = 0
 var timerReset
 
 
 func _ready():
-	timerReset = rand_range(1, 5)
-	var material = SpatialMaterial.new()
-	$Wall.set_surface_material(0, material)
-	$Floor.set_surface_material(0, material)
-	connect("mouse_entered", self, "_on_mouse_enter")
-	connect("mouse_exited", self, "_on_mouse_exit")
+	timerReset = randf_range(1, 5)
+	var material = StandardMaterial3D.new()
+	$Wall.set_surface_override_material(0, material)
+	$Floor.set_surface_override_material(0, material)
+	connect("mouse_entered", Callable(self, "_on_mouse_enter"))
+	connect("mouse_exited", Callable(self, "_on_mouse_exit"))
 
 
 func _process(delta):
@@ -20,19 +20,19 @@ func _process(delta):
 		timer = 0
 
 func _on_mouse_enter():
-	setColour(Color.blue)
+	setColour(Color.BLUE)
 	
 func _on_mouse_exit():
-	setColour(Color.white)
+	setColour(Color.WHITE)
 
 func initialise(x, z):
 	transform.origin = Vector3(x, 0, z)
 
 func setColour(colour):
-	var material = $Wall.get_surface_material(0)
+	var material = $Wall.get_surface_override_material(0)
 	material.albedo_color = colour
-	$Wall.set_surface_material(0, material)
-	$Floor.set_surface_material(0, material)
+	$Wall.set_surface_override_material(0, material)
+	$Floor.set_surface_override_material(0, material)
 
 func toggleWall():
 	var state = !$Wall.visible
