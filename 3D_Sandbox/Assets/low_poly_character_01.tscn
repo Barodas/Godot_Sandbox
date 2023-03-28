@@ -1,0 +1,5 @@
+[gd_scene load_steps=2 format=3 uid="uid://mrolgrd05ugs"]
+
+[ext_resource type="PackedScene" uid="uid://l7rc1u46jhln" path="res://Assets/LowPolyCharacter01.glb" id="1_2xod8"]
+
+[node name="LowPolyCharacter01" instance=ExtResource("1_2xod8")]

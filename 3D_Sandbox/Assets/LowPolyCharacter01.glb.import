@@ -1,15 +1,15 @@
 [remap]
 
-importer="animation_library"
+importer="scene"
 importer_version=1
-type="AnimationLibrary"
-uid="uid://crxt5ouljwfwu"
-path="res://.godot/imported/LowPolyCharacter01.glb-598aa972d9bccb481b282aa12e944b9f.res"
+type="PackedScene"
+uid="uid://l7rc1u46jhln"
+path="res://.godot/imported/LowPolyCharacter01.glb-7603cf3235e2fd0ea9c4372391d7bdc2.scn"
 
 [deps]
 
-source_file="res://LowPolyCharacter01.glb"
-dest_files=["res://.godot/imported/LowPolyCharacter01.glb-598aa972d9bccb481b282aa12e944b9f.res"]
+source_file="res://Assets/LowPolyCharacter01.glb"
+dest_files=["res://.godot/imported/LowPolyCharacter01.glb-7603cf3235e2fd0ea9c4372391d7bdc2.scn"]
 
 [params]
 

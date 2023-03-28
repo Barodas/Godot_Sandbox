@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=3 uid="uid://dx5ebd1ib4h7c"]
 
-[ext_resource type="PackedScene" uid="uid://casnojd5uy67f" path="res://Rpg/low_poly_character_01.tscn" id="1_7y6wq"]
+[ext_resource type="PackedScene" uid="uid://c0couj2jfktv4" path="res://Rpg/player.tscn" id="1_8fuyp"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_5xugo"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -38,4 +38,4 @@ mesh = SubResource("PlaneMesh_5sste")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/StaticBody3D"]
 shape = SubResource("ConcavePolygonShape3D_olfs7")
 
-[node name="LowPolyCharacter01" parent="." instance=ExtResource("1_7y6wq")]
+[node name="Player" parent="." instance=ExtResource("1_8fuyp")]

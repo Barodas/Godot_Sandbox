@@ -1,0 +1,66 @@
+[gd_scene load_steps=8 format=3 uid="uid://c0couj2jfktv4"]
+
+[ext_resource type="Script" path="res://Rpg/Player.gd" id="1_8lnxx"]
+[ext_resource type="PackedScene" uid="uid://mrolgrd05ugs" path="res://Assets/low_poly_character_01.tscn" id="2_eg6bv"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_xp0y5"]
+radius = 0.35
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_7txdu"]
+animation = &"idle"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_mt8au"]
+animation = &"run"
+
+[sub_resource type="AnimationNodeBlendSpace1D" id="AnimationNodeBlendSpace1D_q276d"]
+blend_point_0/node = SubResource("AnimationNodeAnimation_7txdu")
+blend_point_0/pos = 0.0
+blend_point_1/node = SubResource("AnimationNodeAnimation_mt8au")
+blend_point_1/pos = 1.0
+min_space = 0.0
+
+[sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_ykykn"]
+nodes/BlendSpace1D/node = SubResource("AnimationNodeBlendSpace1D_q276d")
+nodes/BlendSpace1D/position = Vector2(20, 120)
+node_connections = [&"output", 0, &"BlendSpace1D"]
+
+[node name="Player" type="CharacterBody3D"]
+script = ExtResource("1_8lnxx")
+
+[node name="LowPolyCharacter01" parent="." instance=ExtResource("2_eg6bv")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
+
+[node name="Skeleton3D" parent="LowPolyCharacter01/Armature" index="0"]
+bones/0/position = Vector3(-0.000530219, 0.954894, -0.00167145)
+bones/0/rotation = Quaternion(-0.0218943, 2.693e-22, -1.21948e-20, 0.99976)
+bones/1/rotation = Quaternion(0.172136, -1.17423e-07, -2.05597e-08, 0.985073)
+bones/2/rotation = Quaternion(-0.00462895, -0.0145917, 0.98663, -0.162254)
+bones/3/rotation = Quaternion(0.151732, -0.0145721, -0.0873886, 0.984443)
+bones/4/rotation = Quaternion(-0.000598959, 0.00453827, 0.996178, -0.0872221)
+bones/5/rotation = Quaternion(-0.132507, 0.000986787, -0.0694648, 0.988744)
+bones/6/rotation = Quaternion(0.599804, 0.0101361, 0.00310185, 0.800076)
+bones/7/rotation = Quaternion(0.00543158, -0.0155384, 0.982423, 0.18594)
+bones/8/rotation = Quaternion(0.15173, 0.0145915, 0.0872628, 0.984454)
+bones/9/rotation = Quaternion(0.0010419, 0.00543002, 0.996231, 0.0865611)
+bones/10/rotation = Quaternion(-0.132654, -0.000986759, 0.0695419, 0.988719)
+bones/11/rotation = Quaternion(0.600333, -0.00995085, -0.00398143, 0.799679)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_xp0y5")
+
+[node name="SpringArmPivot" type="Node3D" parent="."]
+
+[node name="SpringArm3D" type="SpringArm3D" parent="SpringArmPivot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.53187, 0)
+spring_length = 3.0
+
+[node name="Camera3D" type="Camera3D" parent="SpringArmPivot/SpringArm3D"]
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+tree_root = SubResource("AnimationNodeBlendTree_ykykn")
+anim_player = NodePath("../LowPolyCharacter01/AnimationPlayer")
+active = true
+parameters/BlendSpace1D/blend_position = 0.00146628
+
+[editable path="LowPolyCharacter01"]
