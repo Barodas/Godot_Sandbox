@@ -13,18 +13,28 @@ const LERP_VAL = 0.15
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 
 var was_on_floor
+var dragging
 
 func _ready():
-	if not Engine.is_editor_hint():
-		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	pass
+	#if not Engine.is_editor_hint():
+		#Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
 func _unhandled_input(event):
 	if not Engine.is_editor_hint():
 		if Input.is_action_just_pressed("quit"):
 			get_tree().quit()
-	
-		# Mouse Camera rotation
-		if event is InputEventMouseMotion:
+		
+		# Mouse Camera rotation		
+		# TODO: Mouse cursor is centered after drag, should preserve original location
+		if event is InputEventMouseButton:
+			if event.is_pressed():
+				dragging = true
+				Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+			else:
+				dragging = false
+				Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+		elif event is InputEventMouseMotion and dragging:
 			spring_arm_pivot.rotate_y(-event.relative.x * 0.005) # Small number due to radians 
 			spring_arm.rotate_x(-event.relative.y * 0.005)
 			spring_arm.rotation.x = clamp(spring_arm.rotation.x, -PI/4, PI/4)
