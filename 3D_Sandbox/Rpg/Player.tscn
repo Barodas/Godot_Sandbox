@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://c0couj2jfktv4"]
+[gd_scene load_steps=14 format=3 uid="uid://c0couj2jfktv4"]
 
 [ext_resource type="Script" path="res://Rpg/Player.gd" id="1_8lnxx"]
 [ext_resource type="PackedScene" uid="uid://l7rc1u46jhln" path="res://Assets/LowPolyCharacter01.glb" id="2_j2lna"]
@@ -6,23 +6,54 @@
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_xp0y5"]
 radius = 0.35
 
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_7txdu"]
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_2xs43"]
+animation = &"fall"
+
+[sub_resource type="AnimationNodeBlend2" id="AnimationNodeBlend2_8u3sy"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_cekhw"]
 animation = &"idle"
 
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_mt8au"]
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_vo5po"]
+animation = &"jump"
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_j0utl"]
+fadein_time = 0.2
+fadeout_time = 0.2
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_aletq"]
+animation = &"land"
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_bwrl3"]
+fadeout_time = 0.5
+
+[sub_resource type="AnimationNodeBlend2" id="AnimationNodeBlend2_6fdm4"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_d6lyo"]
 animation = &"run"
 
-[sub_resource type="AnimationNodeBlendSpace1D" id="AnimationNodeBlendSpace1D_q276d"]
-blend_point_0/node = SubResource("AnimationNodeAnimation_7txdu")
-blend_point_0/pos = 0.0
-blend_point_1/node = SubResource("AnimationNodeAnimation_mt8au")
-blend_point_1/pos = 1.0
-min_space = 0.0
-
-[sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_ykykn"]
-nodes/BlendSpace1D/node = SubResource("AnimationNodeBlendSpace1D_q276d")
-nodes/BlendSpace1D/position = Vector2(20, 120)
-node_connections = [&"output", 0, &"BlendSpace1D"]
+[sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_en7tx"]
+graph_offset = Vector2(-725.669, -50.6612)
+nodes/Fall/node = SubResource("AnimationNodeAnimation_2xs43")
+nodes/Fall/position = Vector2(-400, 400)
+nodes/Grounded/node = SubResource("AnimationNodeBlend2_8u3sy")
+nodes/Grounded/position = Vector2(200, 200)
+nodes/Idle/node = SubResource("AnimationNodeAnimation_cekhw")
+nodes/Idle/position = Vector2(-400, 0)
+nodes/Jump/node = SubResource("AnimationNodeAnimation_vo5po")
+nodes/Jump/position = Vector2(-400, 540)
+nodes/Jumping/node = SubResource("AnimationNodeOneShot_j0utl")
+nodes/Jumping/position = Vector2(-200, 400)
+nodes/Land/node = SubResource("AnimationNodeAnimation_aletq")
+nodes/Land/position = Vector2(-200, 200)
+nodes/Landing/node = SubResource("AnimationNodeOneShot_bwrl3")
+nodes/Landing/position = Vector2(0, 40)
+nodes/Movement/node = SubResource("AnimationNodeBlend2_6fdm4")
+nodes/Movement/position = Vector2(-200, 0)
+nodes/Run/node = SubResource("AnimationNodeAnimation_d6lyo")
+nodes/Run/position = Vector2(-400, 140)
+nodes/output/position = Vector2(400, 200)
+node_connections = [&"output", 0, &"Grounded", &"Movement", 0, &"Idle", &"Movement", 1, &"Run", &"Grounded", 0, &"Landing", &"Grounded", 1, &"Jumping", &"Landing", 0, &"Movement", &"Landing", 1, &"Land", &"Jumping", 0, &"Fall", &"Jumping", 1, &"Jump"]
 
 [node name="Player" type="CharacterBody3D"]
 script = ExtResource("1_8lnxx")
@@ -31,19 +62,15 @@ script = ExtResource("1_8lnxx")
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
 
 [node name="Skeleton3D" parent="LowPolyCharacter01/Armature" index="0"]
-bones/0/position = Vector3(-6.76629e-06, 0.964051, -2.13298e-05)
-bones/0/rotation = Quaternion(-0.0218948, 1.68918e-23, -7.64906e-22, 0.99976)
-bones/1/rotation = Quaternion(0.172132, -1.17425e-07, -2.05472e-08, 0.985074)
-bones/2/rotation = Quaternion(-0.00552816, -0.0155279, 0.981767, -0.189375)
-bones/3/rotation = Quaternion(0.15173, -0.0145915, -0.0872631, 0.984454)
-bones/4/rotation = Quaternion(0.00380786, -0.0539889, 0.996996, -0.055414)
-bones/5/rotation = Quaternion(-0.0224944, 0.000997697, -0.0117923, 0.999677)
-bones/6/rotation = Quaternion(0.558825, -0.00612388, -0.0179076, 0.829069)
-bones/7/rotation = Quaternion(0.00580793, -0.0144728, 0.979182, 0.202385)
-bones/8/rotation = Quaternion(0.151733, 0.0145698, 0.0874036, 0.984442)
-bones/9/rotation = Quaternion(-0.0037712, -0.0545146, 0.996958, 0.0555771)
-bones/10/rotation = Quaternion(-0.023049, -0.00099768, 0.0120831, 0.999661)
-bones/11/rotation = Quaternion(0.558572, 0.00595463, 0.0178628, 0.829242)
+bones/0/position = Vector3(-0.000463759, 0.956065, -0.00146195)
+bones/2/rotation = Quaternion(-0.00477742, -0.0150345, 0.986119, -0.165287)
+bones/4/rotation = Quaternion(-0.000304295, 0.000571809, 0.99639, -0.0848965)
+bones/5/rotation = Quaternion(-0.124691, 0.000988078, -0.0653672, 0.99004)
+bones/6/rotation = Quaternion(0.59738, 0.00891915, 0.00166297, 0.801907)
+bones/7/rotation = Quaternion(0.00542952, -0.0149728, 0.982072, 0.187834)
+bones/9/rotation = Quaternion(0.000705714, 0.000920694, 0.996425, 0.0844787)
+bones/10/rotation = Quaternion(-0.125362, -0.000987972, 0.0657189, 0.989932)
+bones/11/rotation = Quaternion(0.597656, -0.00890703, -0.00250218, 0.801699)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -58,9 +85,14 @@ spring_length = 3.0
 [node name="Camera3D" type="Camera3D" parent="SpringArmPivot/SpringArm3D"]
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
-tree_root = SubResource("AnimationNodeBlendTree_ykykn")
+tree_root = SubResource("AnimationNodeBlendTree_en7tx")
 anim_player = NodePath("../LowPolyCharacter01/AnimationPlayer")
 active = true
-parameters/BlendSpace1D/blend_position = 0.00146628
+parameters/Grounded/blend_amount = 0
+parameters/Jumping/active = false
+parameters/Jumping/request = 0
+parameters/Landing/active = false
+parameters/Landing/request = 0
+parameters/Movement/blend_amount = 0.0
 
 [editable path="LowPolyCharacter01"]

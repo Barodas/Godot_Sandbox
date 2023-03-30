@@ -12,6 +12,8 @@ const LERP_VAL = 0.15
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 
+var was_on_floor
+
 func _ready():
 	if not Engine.is_editor_hint():
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
@@ -33,6 +35,11 @@ func _physics_process(delta):
 		if not is_on_floor():
 			velocity.y -= gravity * delta
 
+		var grounded_changed = false
+		if is_on_floor() != was_on_floor:
+			grounded_changed = true
+		was_on_floor = is_on_floor()
+		
 		# Handle Jump.
 		if Input.is_action_just_pressed("ui_accept") and is_on_floor():
 			velocity.y = JUMP_VELOCITY
@@ -52,6 +59,13 @@ func _physics_process(delta):
 			velocity.z = lerp(velocity.z, 0.0, LERP_VAL)
 		
 		# AnimationTree -> Parameters -> BlendSpace1D -> Copy Property Path
-		anim_tree.set("parameters/BlendSpace1D/blend_position", velocity.length() / SPEED)
+		anim_tree.set("parameters/Movement/blend_amount", velocity.length() / SPEED)
+		anim_tree.set("parameters/Grounded/blend_amount", !is_on_floor())
+		if grounded_changed:
+			if is_on_floor():
+				anim_tree.set("parameters/Landing/request", true)
+			else:
+				anim_tree.set("parameters/Jumping/request", true)
+		#print(velocity.length() / SPEED)
 		
 		move_and_slide()
