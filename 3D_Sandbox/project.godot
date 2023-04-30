@@ -11,9 +11,13 @@ config_version=5
 [application]
 
 config/name="3D_Sandbox"
-run/main_scene="res://Rpg/RpgRoot.tscn"
+run/main_scene="res://Arpg/ArpgRoot.tscn"
 config/features=PackedStringArray("4.0")
 config/icon="res://icon.png"
+
+[filesystem]
+
+import/fbx/enabled=false
 
 [gui]
 

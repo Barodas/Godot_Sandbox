@@ -1,6 +1,6 @@
-[gd_scene load_steps=14 format=3 uid="uid://c0couj2jfktv4"]
+[gd_scene load_steps=14 format=3 uid="uid://dsyrlaby7xheq"]
 
-[ext_resource type="Script" path="res://Rpg/Player.gd" id="1_8lnxx"]
+[ext_resource type="Script" path="res://Rpg/RpgPlayer.gd" id="1_8lnxx"]
 [ext_resource type="PackedScene" uid="uid://l7rc1u46jhln" path="res://Assets/LowPolyCharacter01.glb" id="2_j2lna"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_xp0y5"]
@@ -62,15 +62,15 @@ script = ExtResource("1_8lnxx")
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
 
 [node name="Skeleton3D" parent="LowPolyCharacter01/Armature" index="0"]
-bones/0/position = Vector3(-0.000363296, 0.957822, -0.00114525)
-bones/2/rotation = Quaternion(-0.00493827, -0.0150201, 0.98517, -0.170849)
-bones/4/rotation = Quaternion(0.000250833, -0.00742683, 0.996721, -0.0805801)
-bones/5/rotation = Quaternion(-0.110009, 0.00099029, -0.0576704, 0.992256)
-bones/6/rotation = Quaternion(0.591956, 0.00673853, -0.00108612, 0.805941)
-bones/7/rotation = Quaternion(0.00552616, -0.0149628, 0.981426, 0.191175)
-bones/9/rotation = Quaternion(6.49851e-05, -0.00712287, 0.996747, 0.08028)
-bones/10/rotation = Quaternion(-0.110595, -0.000990208, 0.0579777, 0.992173)
-bones/11/rotation = Quaternion(0.592195, -0.00674287, 0.000425565, 0.805766)
+bones/0/position = Vector3(-0.000333717, 0.958339, -0.001052)
+bones/2/rotation = Quaternion(-0.0049825, -0.015016, 0.984904, -0.172378)
+bones/4/rotation = Quaternion(0.00041983, -0.00982044, 0.996803, -0.0792911)
+bones/5/rotation = Quaternion(-0.105603, 0.000990899, -0.0553608, 0.992866)
+bones/6/rotation = Quaternion(0.590321, 0.00608612, -0.00191578, 0.807143)
+bones/7/rotation = Quaternion(0.00555283, -0.0149601, 0.981246, 0.192097)
+bones/9/rotation = Quaternion(-0.000127743, -0.00952966, 0.996827, 0.0790224)
+bones/10/rotation = Quaternion(-0.106164, -0.000990823, 0.055655, 0.992789)
+bones/11/rotation = Quaternion(0.59055, -0.00609435, 0.00130436, 0.806977)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)

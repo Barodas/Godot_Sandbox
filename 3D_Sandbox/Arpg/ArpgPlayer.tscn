@@ -1,0 +1,99 @@
+[gd_scene load_steps=14 format=3 uid="uid://bx5bwkawfls77"]
+
+[ext_resource type="Script" path="res://Arpg/ArpgPlayer.gd" id="1_tpfwh"]
+[ext_resource type="PackedScene" uid="uid://l7rc1u46jhln" path="res://Assets/LowPolyCharacter01.glb" id="2_dt2bs"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_xp0y5"]
+radius = 0.35
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_2xs43"]
+animation = &"fall"
+
+[sub_resource type="AnimationNodeBlend2" id="AnimationNodeBlend2_8u3sy"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_cekhw"]
+animation = &"idle"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_vo5po"]
+animation = &"jump"
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_j0utl"]
+fadein_time = 0.2
+fadeout_time = 0.2
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_aletq"]
+animation = &"land"
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_bwrl3"]
+fadeout_time = 0.5
+
+[sub_resource type="AnimationNodeBlend2" id="AnimationNodeBlend2_6fdm4"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_d6lyo"]
+animation = &"run"
+
+[sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_en7tx"]
+graph_offset = Vector2(-725.669, -50.6612)
+nodes/Fall/node = SubResource("AnimationNodeAnimation_2xs43")
+nodes/Fall/position = Vector2(-400, 400)
+nodes/Grounded/node = SubResource("AnimationNodeBlend2_8u3sy")
+nodes/Grounded/position = Vector2(200, 200)
+nodes/Idle/node = SubResource("AnimationNodeAnimation_cekhw")
+nodes/Idle/position = Vector2(-400, 0)
+nodes/Jump/node = SubResource("AnimationNodeAnimation_vo5po")
+nodes/Jump/position = Vector2(-400, 540)
+nodes/Jumping/node = SubResource("AnimationNodeOneShot_j0utl")
+nodes/Jumping/position = Vector2(-200, 400)
+nodes/Land/node = SubResource("AnimationNodeAnimation_aletq")
+nodes/Land/position = Vector2(-200, 200)
+nodes/Landing/node = SubResource("AnimationNodeOneShot_bwrl3")
+nodes/Landing/position = Vector2(0, 40)
+nodes/Movement/node = SubResource("AnimationNodeBlend2_6fdm4")
+nodes/Movement/position = Vector2(-200, 0)
+nodes/Run/node = SubResource("AnimationNodeAnimation_d6lyo")
+nodes/Run/position = Vector2(-400, 140)
+nodes/output/position = Vector2(400, 200)
+node_connections = [&"output", 0, &"Grounded", &"Grounded", 0, &"Landing", &"Grounded", 1, &"Jumping", &"Jumping", 0, &"Fall", &"Jumping", 1, &"Jump", &"Landing", 0, &"Movement", &"Landing", 1, &"Land", &"Movement", 0, &"Idle", &"Movement", 1, &"Run"]
+
+[node name="Player" type="CharacterBody3D"]
+input_ray_pickable = false
+script = ExtResource("1_tpfwh")
+
+[node name="LowPolyCharacter01" parent="." instance=ExtResource("2_dt2bs")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
+
+[node name="Skeleton3D" parent="LowPolyCharacter01/Armature" index="0"]
+bones/0/position = Vector3(-0.000482039, 0.955745, -0.00151957)
+bones/2/rotation = Quaternion(-0.00475969, -0.0150361, 0.986222, -0.164674)
+bones/4/rotation = Quaternion(-0.000360013, 0.00138757, 0.996351, -0.0853377)
+bones/5/rotation = Quaternion(-0.126185, 0.000987838, -0.0661503, 0.989798)
+bones/6/rotation = Quaternion(0.59793, 0.00914161, 0.00194115, 0.801494)
+bones/7/rotation = Quaternion(0.00541808, -0.0149738, 0.982147, 0.187438)
+bones/9/rotation = Quaternion(0.000770759, 0.00174125, 0.996387, 0.0849067)
+bones/10/rotation = Quaternion(-0.126864, -0.000987727, 0.0665067, 0.989688)
+bones/11/rotation = Quaternion(0.59821, -0.00912752, -0.00279999, 0.801283)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_xp0y5")
+
+[node name="SpringArmPivot" type="Node3D" parent="."]
+
+[node name="SpringArm3D" type="SpringArm3D" parent="SpringArmPivot"]
+transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 1, 0)
+spring_length = 10.0
+
+[node name="Camera3D" type="Camera3D" parent="SpringArmPivot/SpringArm3D"]
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+tree_root = SubResource("AnimationNodeBlendTree_en7tx")
+anim_player = NodePath("../LowPolyCharacter01/AnimationPlayer")
+active = true
+parameters/Grounded/blend_amount = 0
+parameters/Jumping/active = false
+parameters/Jumping/request = 0
+parameters/Landing/active = false
+parameters/Landing/request = 0
+parameters/Movement/blend_amount = 0.0
+
+[editable path="LowPolyCharacter01"]
